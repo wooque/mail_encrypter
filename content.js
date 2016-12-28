@@ -58,11 +58,31 @@ function decrypt_txt(txt, password) {
     });
 }
 
-function encrypt_email() {
+function get_send_mail_elem_gmail() {
     var send = document.getElementsByClassName('Am Al editable LW-avf');
     if (send.length == 0) return;
     
-    send = send[0];
+    return send[0];
+}
+
+function get_send_mail_elem_outlook() {
+    var send = document.getElementById('divtagdefaultwrapper');
+    if (send) return send;
+    
+    send = document.getElementsByClassName('_mcp_W1');
+    if (send.length == 0) return;
+    
+    return send[0];
+}
+
+function get_send_mail_elem() {
+    return get_send_mail_elem_gmail() || get_send_mail_elem_outlook();
+}
+
+function encrypt_email() {
+    var send = get_send_mail_elem();
+    if (!send) return;
+    
     var text = send.innerHTML;
     if (text.startsWith(header)) return;
     
@@ -73,11 +93,32 @@ function encrypt_email() {
     });
 };
 
-function attach_on_send() {
+function get_send_button_gmail() {
     var send = document.getElementsByClassName('T-I J-J5-Ji aoO T-I-atl L3');
     if (send.length == 0) return;
     
-    send = send[0];
+    return send[0];
+}
+
+function get_send_button_outlook() {
+    var send = document.getElementsByClassName('_mcp_Z1');
+    if (send.length == 0) return;
+    
+    for (var i = 0; i < send.length; i++) {
+        if (send[i].innerText == "Send") {
+            return send[i];
+        }
+    }
+}
+
+function get_send_button() {
+    return get_send_button_gmail() || get_send_button_outlook();
+}
+
+function attach_on_send() {
+    var send = get_send_button();
+    if (!send) return;
+    
     if (send.getAttribute("attached")) return;
     send.setAttribute("attached", true);
     
@@ -96,15 +137,28 @@ function attach_on_send() {
     });
 }
 
-function decrypt_email() {
+function get_mail_elem_gmail() {
     var msg = document.getElementsByClassName('a3s aXjCH');
     if (msg.length == 0) return;
     
-    msg = msg[0];
-    msg = msg.childNodes[0];
-    if (!msg.innerHTML.startsWith(header)) return;
+    return msg[0].childNodes[0];
+}
+
+function get_mail_elem_outlook() {
+    var msg = document.getElementById('x_divtagdefaultwrapper');
+    return msg;
+}
+
+function get_mail_elem() {
+    return get_mail_elem_gmail() || get_mail_elem_outlook();
+}
+
+function decrypt_email() {
+    var msg = get_mail_elem();
+    if (!msg) return;
     
-    var text = msg.innerHTML.replace(/\<wbr\>/g, '');
+    var text = msg.innerHTML.replace(/(\<wbr\>|\n)/g, '');
+    if (!text.startsWith(header)) return;
     
     return decrypt_txt(text.slice(header.length), password)
     .then(function (dec_txt) {
