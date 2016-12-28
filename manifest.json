@@ -1,0 +1,22 @@
+{
+  "name": "Mail encrypter",
+  "description": "Encrypt mails",
+  "version": "1.0",
+  "permissions": [
+    "activeTab"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_title": "Encrypt mail"
+  },
+  "manifest_version": 2
+}
