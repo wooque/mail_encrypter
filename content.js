@@ -134,7 +134,7 @@ function attach_on_send() {
             triggered = true;
             send.click();
         });
-    });
+    }, true);
 }
 
 function get_mail_elem_gmail() {
