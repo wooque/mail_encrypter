@@ -1,0 +1,5 @@
+bottle
+psycopg2
+PyJWT
+meinheld
+gunicorn
